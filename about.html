@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About FocusFi</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="about-container">
+        <header>
+            <h1>About <span>FocusFi</span></h1>
+            <a href="index.html" class="back-btn">Back to Dashboard</a>
+        </header>
+
+        <main class="about-content">
+            <section class="about-section fade-in">
+                <h2><i class="fas fa-lightbulb"></i> Purpose</h2>
+                <p>FocusFi is a minimalist productivity dashboard designed to help you stay organized and motivated throughout your day. With simple task management, mood-based theming, and motivational quotes, it's your all-in-one focus companion.</p>
+            </section>
+
+            <section class="about-section fade-in">
+                <h2><i class="fas fa-code"></i> Technologies</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <i class="fab fa-html5"></i>
+                        <p>HTML5</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-css3-alt"></i>
+                        <p>CSS3</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-js"></i>
+                        <p>JavaScript</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <p>Responsive Design</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-section fade-in">
+                <h2><i class="fas fa-user"></i> Creator</h2>
+                <p>Yo, I'm <strong>Nullsec0x</strong> - just some random teen who built this when I should've been doing homework. It's basically my way of pretending to be productive while avoiding actual work.</p>
+                <p>If you're reading this, congrats - you're procrastinating too!</p>
+                <a href="https://github.com/nullsec0x" class="github-link" target="_blank">
+                    <i class="fab fa-github"></i> Check my mid code
+                </a>
+            </section>
+        </main>
+
+        <footer class="gradient-footer">
+            <p>© <span id="current-year"></span> FocusFi | Simple Productivity Dashboard</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

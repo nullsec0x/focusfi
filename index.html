@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFi | Productivity Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body data-mood="default">
+    <div class="container">
+        <header>
+            <h1>Focus<span>Fi</span></h1>
+            <nav>
+                <a href="about.html">About</a>
+            </nav>
+        </header>
+
+        <aside class="sidebar">
+            <div class="clock-container">
+                <div class="clock" id="clock"></div>
+                <div class="date" id="date"></div>
+            </div>
+
+            <div class="greeting">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name">
+                <p id="greeting-text">Hello there!</p>
+            </div>
+
+            <div class="mood-selector">
+                <label for="mood">Current Mood</label>
+                <select id="mood">
+                    <option value="default">Select mood</option>
+                    <option value="calm">Calm</option>
+                    <option value="energetic">Energetic</option>
+                    <option value="focused">Focused</option>
+                    <option value="creative">Creative</option>
+                    <option value="relaxed">Relaxed</option>
+                </select>
+            </div>
+
+            <button id="focus-mode-btn">Focus Mode</button>
+        </aside>
+
+        <main>
+            <section class="tasks">
+                <h2>Tasks</h2>
+                <div class="task-input">
+                    <input type="text" id="task-input" placeholder="Add a new task...">
+                    <button id="add-task-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <ul id="task-list"></ul>
+            </section>
+
+            <section class="motivation">
+                <h2>Motivation</h2>
+                <button id="get-motivation-btn">Get Motivation</button>
+                <div id="quote-display"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

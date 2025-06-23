@@ -15,6 +15,25 @@
     --light-text: #333;
     --bg-color: #1a1a1a;
     --card-bg: #2d2d2d;
+    color: var(--text-color); 
+}
+
+.dark-mode button {
+    color: white;
+}
+
+.dark-mode #dark-mode-btn {
+    background-color: var(--light-text);
+    color: var(--text-color);
+}
+
+.dark-mode .about-section,
+.dark-mode .tech-grid,
+.dark-mode .interactive-features,
+.dark-mode .version-info,
+.dark-mode .storage-info,
+.dark-mode .theme-previewer {
+    color: var(--text-color);
 }
 
 .dark-mode .about-section {
@@ -40,7 +59,7 @@ body[data-mood="calm"] {
     --secondary-color: #86c1c1;
     --accent-color: #a7d0d0;
     --bg-color: #f0f7f7;
-    background-image: linear-gradient(rgba(240, 247, 247, 0.9), rgba(240, 247, 247, 0.9)), url('../assets/images/calm-bg.jpg');
+    background-image: linear-gradient(rgba(240, 247, 247, 0.6), rgba(240, 247, 247, 0.6)), url('../assets/images/calm-bg.jpg');
 }
 
 body[data-mood="energetic"] {
@@ -48,7 +67,7 @@ body[data-mood="energetic"] {
     --secondary-color: #ff8e8e;
     --accent-color: #ffb3b3;
     --bg-color: #fff0f0;
-    background-image: linear-gradient(rgba(255, 240, 240, 0.9), rgba(255, 240, 240, 0.9)), url('../assets/images/energetic-bg.jpg');
+    background-image: linear-gradient(rgba(255, 240, 240, 0.6), rgba(255, 240, 240, 0.6)), url('../assets/images/energetic-bg.jpg');
 }
 
 body[data-mood="focused"] {
@@ -56,7 +75,7 @@ body[data-mood="focused"] {
     --secondary-color: #6b8cae;
     --accent-color: #8da9c4;
     --bg-color: #f0f4f8;
-    background-image: linear-gradient(rgba(240, 244, 248, 0.9), rgba(240, 244, 248, 0.9)), url('../assets/images/focused-bg.jpg');
+    background-image: linear-gradient(rgba(240, 244, 248, 0.6), rgba(240, 244, 248, 0.6)), url('../assets/images/focused-bg.jpg');
 }
 
 body[data-mood="creative"] {
@@ -64,7 +83,7 @@ body[data-mood="creative"] {
     --secondary-color: #b886b8;
     --accent-color: #d5a7d0;
     --bg-color: #f7f0f7;
-    background-image: linear-gradient(rgba(247, 240, 247, 0.9), rgba(247, 240, 247, 0.9)), url('../assets/images/creative-bg.jpg');
+    background-image: linear-gradient(rgba(247, 240, 247, 0.6), rgba(247, 240, 247, 0.6)), url('../assets/images/creative-bg.jpg');
 }
 
 body[data-mood="relaxed"] {
@@ -72,7 +91,7 @@ body[data-mood="relaxed"] {
     --secondary-color: #9bc16b;
     --accent-color: #b8d086;
     --bg-color: #f7f7f0;
-    background-image: linear-gradient(rgba(247, 247, 240, 0.9), rgba(247, 247, 240, 0.9)), url('../assets/images/relaxed-bg.jpg');
+    background-image: linear-gradient(rgba(247, 247, 240, 0.6), rgba(247, 247, 240, 0.6)), url('../assets/images/relaxed-bg.jpg');
 }
 
 .container {
@@ -561,7 +580,6 @@ button:hover, .back-btn:hover {
         grid-template-columns: 1fr 1fr;
     }
 }
-/* All existing styles remain exactly the same until the interactive-features section */
 
 .interactive-features {
     margin-top: 3rem;
@@ -671,4 +689,20 @@ button:hover, .back-btn:hover {
     padding: 0.5rem;
     border-radius: 4px;
     background-color: var(--bg-color);
+}
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: #444;
+}
+
+.dark-mode #task-list li {
+    border-bottom-color: #444;
+}
+
+.dark-mode #quote-display {
+    color: var(--text-color);
+    background-color: rgba(0, 0, 0, 0.2);
 }

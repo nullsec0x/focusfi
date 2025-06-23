@@ -10,6 +10,10 @@ const taskList = document.getElementById('task-list');
 const getMotivationBtn = document.getElementById('get-motivation-btn');
 const quoteDisplay = document.getElementById('quote-display');
 const container = document.querySelector('.container');
+const darkModeBtn = document.getElementById('dark-mode-btn');
+const pomodoroBtn = document.getElementById('pomodoro-btn');
+const completedCount = document.getElementById('completed-count');
+const focusCount = document.getElementById('focus-count');
 
 const quotes = [
     "The secret of getting ahead is getting started. - Mark Twain",
@@ -24,12 +28,21 @@ const quotes = [
     "The key is not to prioritize what's on your schedule, but to schedule your priorities. - Stephen Covey"
 ];
 
+let completedTasks = 0;
+let focusSessions = 0;
+let pomodoroInterval;
+let pomodoroMinutes = 25;
+let pomodoroSeconds = 0;
+let isPomodoroRunning = false;
+
 function init() {
     updateClock();
     setInterval(updateClock, 1000);
     
     loadFromLocalStorage();
     setupEventListeners();
+    initDarkMode();
+    updateStats();
 }
 
 function updateClock() {
@@ -49,18 +62,15 @@ function updateClock() {
 
 function setupEventListeners() {
     nameInput.addEventListener('input', updateGreeting);
-    
     moodSelector.addEventListener('change', changeMood);
-    
     focusModeBtn.addEventListener('click', toggleFocusMode);
-    
     addTaskBtn.addEventListener('click', addTask);
     taskInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addTask();
     });
-    
     getMotivationBtn.addEventListener('click', showRandomQuote);
-
+    pomodoroBtn.addEventListener('click', togglePomodoro);
+    
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && container.classList.contains('focus-mode')) {
             toggleFocusMode();
@@ -94,6 +104,8 @@ function changeMood() {
 
 function toggleFocusMode() {
     container.classList.toggle('focus-mode');
+    focusSessions += container.classList.contains('focus-mode') ? 1 : 0;
+    updateStats();
     
     if (container.classList.contains('focus-mode')) {
         focusModeBtn.textContent = 'Exit Focus Mode';
@@ -107,6 +119,8 @@ function toggleFocusMode() {
         const exitBtn = document.getElementById('exit-focus-btn');
         if (exitBtn) exitBtn.remove();
     }
+    
+    saveToLocalStorage();
 }
 
 function addTask() {
@@ -114,16 +128,31 @@ function addTask() {
     if (taskText) {
         const taskItem = document.createElement('li');
         
+        const taskCheckbox = document.createElement('input');
+        taskCheckbox.type = 'checkbox';
+        taskCheckbox.addEventListener('change', function() {
+            const taskSpan = this.nextElementSibling;
+            taskSpan.style.textDecoration = this.checked ? 'line-through' : 'none';
+            completedTasks += this.checked ? 1 : -1;
+            updateStats();
+            saveToLocalStorage();
+        });
+        
         const taskSpan = document.createElement('span');
         taskSpan.textContent = taskText;
         
         const deleteBtn = document.createElement('button');
         deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
         deleteBtn.addEventListener('click', () => {
+            if (taskCheckbox.checked) {
+                completedTasks--;
+                updateStats();
+            }
             taskList.removeChild(taskItem);
             saveToLocalStorage();
         });
         
+        taskItem.appendChild(taskCheckbox);
         taskItem.appendChild(taskSpan);
         taskItem.appendChild(deleteBtn);
         taskList.appendChild(taskItem);
@@ -140,15 +169,22 @@ function showRandomQuote() {
 
 function saveToLocalStorage() {
     const tasks = [];
-    document.querySelectorAll('#task-list li span').forEach(task => {
-        tasks.push(task.textContent);
+    document.querySelectorAll('#task-list li').forEach(taskItem => {
+        const text = taskItem.querySelector('span').textContent;
+        const completed = taskItem.querySelector('input').checked;
+        tasks.push({ text, completed });
     });
     
     const data = {
         name: nameInput.value,
         mood: moodSelector.value,
         tasks: tasks,
-        greeting: greetingText.textContent
+        greeting: greetingText.textContent,
+        darkMode: document.body.classList.contains('dark-mode'),
+        stats: {
+            completed: completedTasks,
+            focus: focusSessions
+        }
     };
     
     localStorage.setItem('focusFiData', JSON.stringify(data));
@@ -168,25 +204,104 @@ function loadFromLocalStorage() {
         }
         
         if (data.tasks && data.tasks.length > 0) {
-            data.tasks.forEach(taskText => {
+            data.tasks.forEach(task => {
                 const taskItem = document.createElement('li');
                 
+                const taskCheckbox = document.createElement('input');
+                taskCheckbox.type = 'checkbox';
+                taskCheckbox.checked = task.completed || false;
+                taskCheckbox.addEventListener('change', function() {
+                    const taskSpan = this.nextElementSibling;
+                    taskSpan.style.textDecoration = this.checked ? 'line-through' : 'none';
+                    completedTasks += this.checked ? 1 : -1;
+                    updateStats();
+                    saveToLocalStorage();
+                });
+                
                 const taskSpan = document.createElement('span');
-                taskSpan.textContent = taskText;
+                taskSpan.textContent = task.text;
+                taskSpan.style.textDecoration = task.completed ? 'line-through' : 'none';
                 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
                 deleteBtn.addEventListener('click', () => {
+                    if (taskCheckbox.checked) {
+                        completedTasks--;
+                        updateStats();
+                    }
                     taskList.removeChild(taskItem);
                     saveToLocalStorage();
                 });
                 
+                taskItem.appendChild(taskCheckbox);
                 taskItem.appendChild(taskSpan);
                 taskItem.appendChild(deleteBtn);
                 taskList.appendChild(taskItem);
+                
+                if (task.completed) completedTasks++;
             });
         }
+        
+        if (data.darkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        }
+        
+        if (data.stats) {
+            completedTasks = data.stats.completed || 0;
+            focusSessions = data.stats.focus || 0;
+            updateStats();
+        }
     }
+}
+
+function initDarkMode() {
+    darkModeBtn.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        darkModeBtn.innerHTML = document.body.classList.contains('dark-mode') 
+            ? '<i class="fas fa-sun"></i> Light Mode' 
+            : '<i class="fas fa-moon"></i> Dark Mode';
+        saveToLocalStorage();
+    });
+}
+
+function togglePomodoro() {
+    if (!isPomodoroRunning) {
+        isPomodoroRunning = true;
+        pomodoroMinutes = 25;
+        pomodoroSeconds = 0;
+        pomodoroBtn.textContent = `Pomodoro (${pomodoroMinutes}:00)`;
+        
+        pomodoroInterval = setInterval(() => {
+            if (pomodoroSeconds === 0) {
+                if (pomodoroMinutes === 0) {
+                    clearInterval(pomodoroInterval);
+                    pomodoroBtn.textContent = 'Pomodoro Complete!';
+                    new Notification('Pomodoro Complete! Take a break!');
+                    setTimeout(() => {
+                        pomodoroBtn.textContent = 'Start Pomodoro (25:00)';
+                        isPomodoroRunning = false;
+                    }, 3000);
+                    return;
+                }
+                pomodoroMinutes--;
+                pomodoroSeconds = 59;
+            } else {
+                pomodoroSeconds--;
+            }
+            
+            pomodoroBtn.textContent = `Pomodoro (${pomodoroMinutes}:${pomodoroSeconds.toString().padStart(2, '0')})`;
+        }, 1000);
+    } else {
+        clearInterval(pomodoroInterval);
+        isPomodoroRunning = false;
+        pomodoroBtn.textContent = 'Start Pomodoro (25:00)';
+    }
+}
+
+function updateStats() {
+    completedCount.textContent = completedTasks;
+    focusCount.textContent = focusSessions;
 }
 
 document.addEventListener('DOMContentLoaded', init);

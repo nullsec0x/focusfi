@@ -1,5 +1,11 @@
 # FocusFi - A Productivity Dashboard for the Chronically Distracted
 
+[![FocusFi Banner](https://i.postimg.cc/B6vwL9Zs/Screenshot-20250626-113312.png)](https://postimg.cc/bGKRW52F)
+
+📄 **[Raw Documentation](https://raw.githubusercontent.com/nullsec0x/FocusFi/main/README.md)** *(Right-click → Save As)*
+
+---
+
 Hey you! Yeah, you - the one who opened 15 tabs of "how to be productive" while avoiding actual work. Welcome to **FocusFi**, the productivity dashboard built by a procrastinator for procrastinators.
 
 ## What's This?
